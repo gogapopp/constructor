@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"constructor/components/pages"
 	"constructor/internal/lib/render"
 	"constructor/internal/model"
 	"constructor/internal/service"
@@ -13,7 +14,6 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-playground/validator"
-	"github.com/gogapopp/Skoof/components/auth_pages"
 	"go.uber.org/zap"
 )
 
@@ -37,7 +37,7 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 			userPasswordConfirm := r.FormValue("password_confirm")
 
 			if userPassword != userPasswordConfirm {
-				if err := render.Render(ctx, w, auth_pages.SignUpBase(auth_pages.SignUp("passwords doesn't equals"))); err != nil {
+				if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp("passwords doesn't equals"))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
@@ -63,7 +63,7 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 				} else {
 					errMsg = "something went wrong"
 				}
-				if err := render.Render(ctx, w, auth_pages.SignUpBase(auth_pages.SignUp(errMsg))); err != nil {
+				if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp(errMsg))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
@@ -78,7 +78,7 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 			if r.URL.Query().Get("redirected") == "true" {
 				errMsg = "you need to signin or signup"
 			}
-			if err := render.Render(ctx, w, auth_pages.SignUpBase(auth_pages.SignUp(errMsg))); err != nil {
+			if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp(errMsg))); err != nil {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
@@ -116,7 +116,7 @@ func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 				} else {
 					errMsg = "something went wrong"
 				}
-				if err := render.Render(ctx, w, auth_pages.SignInBase(auth_pages.SignIn(errMsg))); err != nil {
+				if err := render.Render(ctx, w, pages.SignInBase(pages.SignIn(errMsg))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
@@ -132,7 +132,7 @@ func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 				Secure:   true}
 			http.SetCookie(w, cookie)
 
-			http.Redirect(w, r, "/skoof", http.StatusSeeOther)
+			http.Redirect(w, r, "/constructor", http.StatusSeeOther)
 			return
 
 		case http.MethodGet:
@@ -140,7 +140,7 @@ func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 			if r.URL.Query().Get("redirected") == "true" {
 				errMsg = "you need to signin or signup"
 			}
-			if err := render.Render(ctx, w, auth_pages.SignInBase(auth_pages.SignIn(errMsg))); err != nil {
+			if err := render.Render(ctx, w, pages.SignInBase(pages.SignIn(errMsg))); err != nil {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return

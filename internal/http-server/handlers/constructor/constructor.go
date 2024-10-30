@@ -3,10 +3,9 @@ package constructor
 import (
 	"net/http"
 
+	"constructor/components/pages"
 	"constructor/internal/http-server/middlewares"
 	"constructor/internal/lib/render"
-
-	"constructor/components/constructor_pages"
 
 	"go.uber.org/zap"
 )
@@ -24,7 +23,7 @@ func ConstructorPage(logger *zap.SugaredLogger) http.HandlerFunc {
 			}
 			_ = v
 			// TODO:
-			if err := render.Render(r.Context(), w, constructor_pages.ConstructorBase(constructor_pages.Constructor())); err != nil {
+			if err := render.Render(r.Context(), w, pages.ConstructorBase(pages.Constructor())); err != nil {
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}

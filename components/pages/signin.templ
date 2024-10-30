@@ -1,0 +1,114 @@
+package pages
+
+import "constructor/components"
+
+templ SignIn(errMsg string) {
+    <section class="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        /* Container with max-width and responsive padding */
+        <div class="w-full max-w-md mx-auto px-6">
+            /* Main card with refined aesthetics */
+            <div class="relative bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-8 space-y-8">
+                /* Logo placeholder (optional) */
+                <div class="w-12 h-12 mx-auto mb-6">
+                    <div class="w-full h-full rounded-lg bg-black"></div>
+                </div>
+
+                /* Header with improved typography */
+                <div class="text-center space-y-2">
+                    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900">Welcome back</h1>
+                    <p class="text-base text-gray-500">Sign in to continue to your account</p>
+                </div>
+
+                /* Error message with refined styling */
+                if errMsg != "" {
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+                        <div class="flex">
+                            <p class="text-sm text-red-700">{ errMsg }</p>
+                            <button 
+                                class="ml-auto text-sm text-red-700 hover:text-red-900 underline transition-colors" 
+                                onclick="window.location.href='/signup'"
+                            >
+                                Create account
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                /* Form with enhanced spacing and interactions */
+                <form class="space-y-6" action="" method="post">
+                    <div class="space-y-5">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">Email or Username</label>
+                            <input 
+                                class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 
+                                       placeholder-gray-400
+                                       transition-colors duration-200
+                                       focus:bg-white focus:outline-none focus:border-black focus:ring-1 focus:ring-black" 
+                                type="text" 
+                                name="email_or_username"
+                                placeholder="Enter your email or username"
+                                required
+                            />
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <input 
+                                class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 
+                                       placeholder-gray-400
+                                       transition-colors duration-200
+                                       focus:bg-white focus:outline-none focus:border-black focus:ring-1 focus:ring-black" 
+                                type="password" 
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    // /* Additional options */
+                    // <div class="flex items-center justify-between">
+                    //     <label class="flex items-center space-x-2 cursor-pointer group">
+                    //         <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"/>
+                    //         <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Remember me</span>
+                    //     </label>
+                    //     <button type="button" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                    //         Forgot password?
+                    //     </button>
+                    // </div>
+
+                    /* Submit button with enhanced animations */
+                    <button 
+                        class="w-full bg-black text-white mt-8 px-6 py-3 rounded-lg font-medium
+                               transform transition-all duration-200
+                               hover:bg-gray-900 hover:scale-[1.01]
+                               active:scale-[0.99]
+                               focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900" 
+                        type="submit"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                /* Footer links */
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">
+                        Don't have an account?
+                        <button 
+                            onclick="window.location.href='/signup'" 
+                            class="ml-1 text-black hover:text-gray-900 underline transition-colors"
+                        >
+                            Create account
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+templ SignInBase(cmp templ.Component) {
+    @components.Base() {
+        @cmp
+    }
+}

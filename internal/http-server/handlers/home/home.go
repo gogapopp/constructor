@@ -3,9 +3,8 @@ package home
 import (
 	"net/http"
 
+	"constructor/components/pages"
 	"constructor/internal/lib/render"
-
-	"constructor/components"
 
 	"go.uber.org/zap"
 )
@@ -17,7 +16,7 @@ func HomePage(logger *zap.SugaredLogger) http.HandlerFunc {
 		_ = ctx
 		switch r.Method {
 		case http.MethodGet:
-			if err := render.Render(r.Context(), w, components.HomeBase(components.Home("Constructor Constructor Constructor"))); err != nil {
+			if err := render.Render(r.Context(), w, pages.HomeBase(pages.Home("Constructor"))); err != nil {
 				logger.Errorf("%s: %w", op, err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return

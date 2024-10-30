@@ -25,7 +25,7 @@ Described in the file [swagger.yml](docs/swagger.yml).
 
 ```bash
 docker-compose up  
-go run cmd/main.go
+go run cmd/server/main.go
 ```
 
 ### How to stop the application

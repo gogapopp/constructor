@@ -1,0 +1,78 @@
+package pages
+
+import "constructor/components"
+import "constructor/components/partials"
+
+templ Home(title string) {
+    <body class="min-h-screen bg-gray-50">
+        @partials.Navigation(title)
+
+        <main>
+            // Hero Section
+            <div class="relative bg-white border-b border-gray-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+                    <div class="text-center">
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-8">
+                            Welcome to Our Community
+                        </h2>
+                        <p class="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto mb-12">
+                            Join thousands of people who trust our platform for connecting, sharing, and growing together.
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <a href="/constructor" 
+                               class="inline-flex items-center justify-center px-8 py-4 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow">
+                                Get Started
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            // Features Grid
+            <div class="bg-gray-50 py-24">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid md:grid-cols-3 gap-12">
+                        // Feature Cards
+                        <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                                <span class="text-blue-600 text-xl">★</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-900">Connect</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Build meaningful connections with like-minded individuals.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                                <span class="text-blue-600 text-xl">✦</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-900">Share</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Share your ideas and experiences with the community.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                                <span class="text-blue-600 text-xl">↗</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-4 text-gray-900">Grow</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Learn and grow together with community support.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        @partials.Footer()
+    </body>
+}
+
+templ HomeBase(cmp templ.Component) {
+    @components.Base() {
+        @cmp
+    }
+}
