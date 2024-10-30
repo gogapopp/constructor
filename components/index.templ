@@ -1,0 +1,28 @@
+package components
+
+import "constructor/components/layout"
+
+templ Home(title string) {
+<body class="bg-purple-700">
+    <nav class="bg-orange-700 p-6">
+        <div class="flex items-center justify-between">
+            <div class="text-3xl font-bold text-green-500">
+                { title }
+            </div>
+            <div class="space-x-4">
+                <a href="/signin" class="text-green-500 font-semibold">Sign In</a>
+                <a href="/signup" class="text-green-500 font-semibold">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+    <main class="flex items-center justify-center h-screen">
+        <a href="/constructor" class="text-6xl font-bold text-green-500">Community</a>
+    </main>
+</body>
+}
+
+templ HomeBase(cmp templ.Component) {
+    @layout.Base() {
+        @cmp
+    }
+}

@@ -1,0 +1,20 @@
+package constructor_pages
+
+import "constructor/components/layout"
+
+templ Constructor() {
+<body class="bg-purple-700">
+    <nav class="bg-orange-700 p-6">
+        Constructor
+    </nav>
+    <main class="flex items-center justify-center h-screen">
+       Constructor
+    </main>
+</body>
+}
+
+templ ConstructorBase(cmp templ.Component) {
+    @layout.Base() {
+        @cmp
+    }
+}
