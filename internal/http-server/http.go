@@ -4,6 +4,7 @@ import (
 	"constructor/internal/config"
 	"constructor/internal/http-server/handlers/auth"
 	"constructor/internal/http-server/handlers/constructor"
+	"constructor/internal/http-server/handlers/course"
 	"constructor/internal/http-server/handlers/home"
 	"constructor/internal/http-server/middlewares"
 	"net/http"
@@ -29,6 +30,12 @@ func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthSe
 
 		r.Get("/constructor", constructor.ConstructorPage(logger))
 		r.Post("/constructor", constructor.ConstructorPage(logger))
+
+		r.Get("/course", course.CoursePage(logger))
+		r.Post("/course", course.CoursePage(logger))
+
+		r.Get("/coursecreation", course.CourseCreationPage(logger))
+		r.Post("/coursecreation", course.CourseCreationPage(logger))
 
 		r.Get("/constructor/community", constructor.ConstructorPage(logger))
 		r.Post("/constructor/community", constructor.ConstructorPage(logger))

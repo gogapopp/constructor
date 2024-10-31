@@ -7,7 +7,6 @@ require (
 	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/httprate v0.14.1
 	github.com/go-playground/validator v9.31.0+incompatible
-	github.com/gogapopp/Skoof v0.0.0-20240420112738-725471564eaa
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438
 	github.com/joho/godotenv v1.5.1

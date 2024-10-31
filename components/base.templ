@@ -1,21 +1,21 @@
 package components
 
 templ Base() {
-    <!DOCTYPE html>
-    <html lang="en" data-theme="dark">
-    <head>
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-        <link rel="stylesheet" href="/assets/css/styles.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.10/dist/full.min.css" rel="stylesheet" type="text/css"/>
-        <meta name="description" content="Constructor Project"/>
-        <meta name="google" content="notranslate"/>
-        <title>Constructor</title>
-    </head>
-    <body class="sample-transition" hx-boost="true">
-        { children... }
-    </body>
-    </html>
+    <!doctype html>
+<html lang="en" class="bg-white dark:bg-zinc-900">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Constructor - Learn and Build Together">
+    <meta name="google" content="notranslate">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    
+    <title>Constructor</title>
+</head>
+<body class="min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50">
+    { children... }
+</body>
+</html>
 }

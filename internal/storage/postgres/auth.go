@@ -28,16 +28,20 @@ func (s *authStorage) SignUp(ctx context.Context, user model.SignUpUser) error {
 		op    = "postgres.SignUp"
 		query = "INSERT INTO users (email, username, password_hash, created_at, role) VALUES ($1, $2, $3, $4, $5);" // TODO: add metainfo
 	)
+
 	_, err := s.conn.Exec(ctx, query, user.Email, user.Username, user.PasswordHash, user.CreatedAt, user.Role)
 	if err != nil {
 		var pgErr *pgconn.PgError
+
 		if errors.As(err, &pgErr) {
 			if pgErr.Code == pgerrcode.UniqueViolation {
 				return fmt.Errorf("%s: %w", op, storage.ErrUserExists)
 			}
 		}
+
 		return fmt.Errorf("%s: %w", op, err)
 	}
+
 	return nil
 }
 
@@ -50,13 +54,17 @@ func (s *authStorage) SignIn(ctx context.Context, user model.SignInUser) (int, s
 		userID int
 		role   string
 	)
+
 	row := s.conn.QueryRow(ctx, query, user.Username, user.PasswordHash)
+
 	err := row.Scan(&userID, &role)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return 0, "", fmt.Errorf("%s: %w", op, storage.ErrUserNotExist)
 		}
+
 		return 0, "", fmt.Errorf("%s: %w", op, err)
 	}
+
 	return userID, role, nil
 }

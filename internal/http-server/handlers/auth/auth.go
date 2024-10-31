@@ -37,7 +37,7 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 			userPasswordConfirm := r.FormValue("password_confirm")
 
 			if userPassword != userPasswordConfirm {
-				if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp("passwords doesn't equals"))); err != nil {
+				if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp("Passwords doesn't equals"))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
@@ -55,13 +55,13 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 				var errMsg string
 				if errors.Is(err, storage.ErrUserExists) {
-					errMsg = "user already exists"
+					errMsg = "User already exists"
 				} else if errors.As(err, &valErr) {
-					errMsg = "email, password and username is required field"
+					errMsg = "Email, password and username is required field"
 				} else if errors.Is(err, service.ErrUndefinedRole) {
-					errMsg = "undefined role (available roles: admin, user)"
+					errMsg = "Undefined role (available roles: admin, user)"
 				} else {
-					errMsg = "something went wrong"
+					errMsg = "Something went wrong"
 				}
 				if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp(errMsg))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
@@ -76,7 +76,7 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 		case http.MethodGet:
 			var errMsg string
 			if r.URL.Query().Get("redirected") == "true" {
-				errMsg = "you need to signin or signup"
+				errMsg = "You need to signin or signup"
 			}
 			if err := render.Render(ctx, w, pages.SignUpBase(pages.SignUp(errMsg))); err != nil {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
@@ -110,11 +110,11 @@ func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 				var errMsg string
 				if errors.Is(err, storage.ErrUserNotExist) {
-					errMsg = "invalid email/username or password"
+					errMsg = "Invalid email/username or password"
 				} else if errors.As(err, &valErr) {
-					errMsg = "email or username and password is required field"
+					errMsg = "Email or username and password is required field"
 				} else {
-					errMsg = "something went wrong"
+					errMsg = "Something went wrong"
 				}
 				if err := render.Render(ctx, w, pages.SignInBase(pages.SignIn(errMsg))); err != nil {
 					logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
@@ -138,7 +138,7 @@ func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 		case http.MethodGet:
 			var errMsg string
 			if r.URL.Query().Get("redirected") == "true" {
-				errMsg = "you need to signin or signup"
+				errMsg = "You need to signin or signup"
 			}
 			if err := render.Render(ctx, w, pages.SignInBase(pages.SignIn(errMsg))); err != nil {
 				logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)

@@ -19,12 +19,12 @@ func main() {
 		logger = must(logger.New())
 		config = must(config.New(".env"))
 
-		conn        = must(postgres.New(config.PGConfig.DSN))
-		authDB      = postgres.NewAuthStorage(conn)
-		communityDB = postgres.NewCommunityStorage(conn)
+		conn      = must(postgres.New(config.PGConfig.DSN))
+		authDB    = postgres.NewAuthStorage(conn)
+		courseyDB = postgres.NewCourseStorage(conn)
 
-		authService = service.New(config.PASS_SECRET, config.JWT_SECRET, authDB)
-		_           = communityDB
+		authService   = service.NewAuthService(config.PASS_SECRET, config.JWT_SECRET, authDB)
+		courseService = service.NewCourseService(courseyDB)
 
 		r = chi.NewRouter()
 	)
@@ -40,6 +40,8 @@ func main() {
 
 	// Initializes server routes and returns a completed http server.
 	server := httpserver.New(r, logger, config, authService)
+
+	courseService.StartCourseAccessExpirationCheck()
 
 	logger.Infof("runnig server at: %s", config.HTTPConfig.Addr)
 	if err := server.ListenAndServe(); err != nil {

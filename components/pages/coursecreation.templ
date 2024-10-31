@@ -1,0 +1,237 @@
+package pages
+
+import (
+	"constructor/components"
+)
+
+type CourseModule struct {
+	Title       string
+	Description string
+	Lessons     []Lesson
+}
+
+type Lesson struct {
+	Title       string
+	Content     string
+	VideoURL    string
+	ResourceURL string
+	Type        string // video, text, quiz etc
+}
+
+templ CourseCreation() {
+	<div class="min-h-screen bg-white dark:bg-zinc-900">
+		<nav class="fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50">
+			<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex justify-between items-center h-16">
+					<div class="flex items-center space-x-4">
+						<a href="/" class="flex items-center space-x-3">
+							<div class="w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center">
+								<span class="text-white dark:text-black text-lg font-bold">C</span>
+							</div>
+							<span class="text-lg font-bold text-zinc-900 dark:text-zinc-50">Constructor</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+			<header class="mb-12">
+				<div class="flex justify-between items-center mb-12">
+					<div>
+						<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">Create New Course</h1>
+						<p class="text-base text-zinc-600 dark:text-zinc-400">Design your comprehensive learning experience</p>
+					</div>
+				</div>
+			</header>
+
+			<form 
+				hx-post="/api/courses/create" 
+				hx-target="#form-result" 
+				class="space-y-8 bg-white dark:bg-zinc-800 p-8 rounded-lg border border-zinc-200 dark:border-zinc-700"
+			>
+				/* Основная информация о курсе */
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+					<div>
+						<label for="title" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+							Course Title
+						</label>
+						<input 
+							type="text" 
+							name="title" 
+							required 
+							class="w-full px-4 py-2 rounded-lg input-style"
+						/>
+					</div>
+					<div>
+						<label for="difficulty_level" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+							Difficulty Level
+						</label>
+						<select 
+							name="difficulty_level" 
+							required 
+							class="w-full px-4 py-2 rounded-lg input-style"
+						>
+							<option value="">Select Difficulty</option>
+							<option value="beginner">Beginner</option>
+							<option value="intermediate">Intermediate</option>
+							<option value="advanced">Advanced</option>
+						</select>
+					</div>
+				</div>
+
+				/* Описание курса */
+				<div>
+					<label for="description" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+						Course Description
+					</label>
+					<textarea 
+						name="description" 
+						rows="4"
+						required 
+						class="w-full px-4 py-2 rounded-lg input-style"
+					></textarea>
+				</div>
+
+				/* Модули курса */
+				<div id="course-modules">
+					<div class="flex justify-between items-center mb-4">
+						<h2 class="text-xl font-semibold">Course Modules</h2>
+						<button 
+							type="button"
+							onclick="addModule()"
+							class="px-4 py-2 bg-green-500 text-white rounded-lg"
+						>
+							Add Module
+						</button>
+					</div>
+
+					<div id="modules-container">
+						/* Динамически добавляемые модули будут здесь */
+					</div>
+				</div>
+
+				/* Кнопка создания курса */
+				<div class="flex justify-end mt-6">
+					<button 
+						type="submit" 
+						class="px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black rounded-lg"
+					>
+						Create Full Course
+					</button>
+				</div>
+			</form>
+		</main>
+
+		<script>
+			let moduleCounter = 0;
+
+			function addModule() {
+				moduleCounter++;
+				const container = document.getElementById('modules-container');
+				const moduleHTML = `
+					<div class="module-block border p-4 mb-4 rounded-lg" data-module-id="${moduleCounter}">
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+							<input 
+								type="text" 
+								name="modules[${moduleCounter}][title]" 
+								placeholder="Module Title" 
+								required 
+								class="w-full px-4 py-2 rounded-lg input-style"
+							/>
+							<textarea 
+								name="modules[${moduleCounter}][description]" 
+								placeholder="Module Description" 
+								rows="2"
+								class="w-full px-4 py-2 rounded-lg input-style"
+							></textarea>
+						</div>
+						
+						<div id="lessons-container-${moduleCounter}">
+						</div>
+
+						<div class="flex justify-between mt-4">
+							<button 
+								type="button"
+								onclick="addLesson(${moduleCounter})"
+								class="px-4 py-2 bg-blue-500 text-white rounded-lg"
+							>
+								Add Lesson
+							</button>
+							<button 
+								type="button"
+								onclick="removeModule(${moduleCounter})"
+								class="px-4 py-2 bg-red-500 text-white rounded-lg"
+							>
+								Remove Module
+							</button>
+						</div>
+					</div>
+				`;
+				container.insertAdjacentHTML('beforeend', moduleHTML);
+			}
+
+			function addLesson(moduleId) {
+				const container = document.getElementById(`lessons-container-${moduleId}`);
+				const lessonCounter = container.children.length + 1;
+				const lessonHTML = `
+					<div class="lesson-block border p-3 mb-3 rounded-lg">
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+							<input 
+								type="text" 
+								name="modules[${moduleId}][lessons][${lessonCounter}][title]" 
+								placeholder="Lesson Title" 
+								required 
+								class="w-full px-4 py-2 rounded-lg input-style"
+							/>
+							<select 
+								name="modules[${moduleId}][lessons][${lessonCounter}][type]"
+								class="w-full px-4 py-2 rounded-lg input-style"
+							>
+								<option value="text">Text</option>
+								<option value="video">Video</option>
+								<option value="quiz">Quiz</option>
+							</select>
+						</div>
+						
+						<textarea 
+							name="modules[${moduleId}][lessons][${lessonCounter}][content]" 
+							placeholder="Lesson Content" 
+							rows="3"
+							class="w-full px-4 py-2 rounded-lg input-style mb-3"
+						></textarea>
+
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<input 
+								type="text" 
+								name="modules[${moduleId}][lessons][${lessonCounter}][video_url]" 
+								placeholder="Video URL (optional)" 
+								class="w-full px-4 py-2 rounded-lg input-style"
+							/>
+							<input 
+								type="text" 
+								name="modules[${moduleId}][lessons][${lessonCounter}][resource_url]" 
+								placeholder="Resource URL (optional)" 
+								class="w-full px-4 py-2 rounded-lg input-style"
+							/>
+						</div>
+					</div>
+				`;
+				container.insertAdjacentHTML('beforeend', lessonHTML);
+			}
+
+			function removeModule(moduleId) {
+				const moduleToRemove = document.querySelector(`[data-module-id="${moduleId}"]`);
+				if (moduleToRemove) {
+					moduleToRemove.remove();
+				}
+			}
+		</script>
+	</div>
+}
+
+templ CourseCreationBase(cmp templ.Component) {
+    @components.Base() {
+        @cmp
+    }
+}
