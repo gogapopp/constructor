@@ -5,7 +5,7 @@ import (
 	httpserver "constructor/internal/http-server"
 	"constructor/internal/lib/logger"
 	"constructor/internal/service"
-	"constructor/internal/storage/postgres"
+	"constructor/internal/storage/sqlite"
 	"os"
 	"time"
 
@@ -19,16 +19,15 @@ func main() {
 		logger = must(logger.New())
 		config = must(config.New(".env"))
 
-		conn      = must(postgres.New(config.PGConfig.DSN))
-		authDB    = postgres.NewAuthStorage(conn)
-		courseyDB = postgres.NewCourseStorage(conn)
+		path      = must(sqlite.New("storage.db"))
+		authDB    = sqlite.NewAuthStorage(path)
+		coursesDB = sqlite.NewCourseStorage(path)
 
 		authService   = service.NewAuthService(config.PASS_SECRET, config.JWT_SECRET, authDB)
-		courseService = service.NewCourseService(courseyDB)
+		courseService = service.NewCourseService(coursesDB)
 
 		r = chi.NewRouter()
 	)
-	defer conn.Close()
 
 	// Initializes middlewares for all server requests,
 	// other middlewares can be initialized in the New function, see httpserver.New().

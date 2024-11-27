@@ -29,5 +29,6 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/jackc/pgx/v5 v5.7.1
+	github.com/mattn/go-sqlite3 v1.14.24
 	go.uber.org/multierr v1.11.0 // indirect
 )

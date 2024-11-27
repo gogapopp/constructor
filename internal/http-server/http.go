@@ -34,6 +34,7 @@ func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthSe
 		r.Get("/course", course.CoursePage(logger))
 		r.Post("/course", course.CoursePage(logger))
 
+		// code below needs to refactor
 		r.Get("/coursecreation", course.CourseCreationPage(logger))
 		r.Post("/coursecreation", course.CourseCreationPage(logger))
 
