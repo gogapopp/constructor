@@ -20,3 +20,27 @@ type (
 		PasswordHash string `json:"password" validate:"required"`
 	}
 )
+
+type Course struct {
+	Title           string    `json:"title" validate:"required"`
+	Description     string    `json:"description" validate:"required"`
+	CreatorID       int       `json:"creator_id" validate:"required"`
+	CreatedAt       time.Time `json:"created_at" validate:"required"`
+	DifficultyLevel string    `json:"difficulty_level" validate:"required"`
+	CoverImage      string    `json:"cover_image"`
+	Modules         []Module  `json:"modules"`
+}
+
+type Module struct {
+	Title       string   `json:"title" validate:"required"`
+	Description string   `json:"description"`
+	Lessons     []Lesson `json:"lessons"`
+}
+
+type Lesson struct {
+	Title       string `json:"title" validate:"required"`
+	Type        string `json:"type"`
+	Content     string `json:"content"`
+	VideoURL    string `json:"video_url"`
+	ResourceURL string `json:"resource_url"`
+}

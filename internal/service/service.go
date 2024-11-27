@@ -15,10 +15,6 @@ type authStorager interface {
 	SignIn(ctx context.Context, user model.SignInUser) (int, string, error)
 }
 
-type courseStorager interface {
-	CheckAndExpireCourseAccess() error
-}
-
 type authService struct {
 	authStore  authStorager
 	validator  *validator.Validate
@@ -26,8 +22,13 @@ type authService struct {
 	jwtSecret  string
 }
 
+type courseStorager interface {
+	CreateCourse(ctx context.Context, course model.Course) error
+}
+
 type courseService struct {
 	courseStore courseStorager
+	validator   *validator.Validate
 }
 
 func NewAuthService(passSecret, jwtSecret string, authStorage authStorager) *authService {
@@ -41,6 +42,7 @@ func NewAuthService(passSecret, jwtSecret string, authStorage authStorager) *aut
 
 func NewCourseService(courseStorage courseStorager) *courseService {
 	return &courseService{
+		validator:   validator.New(),
 		courseStore: courseStorage,
 	}
 }

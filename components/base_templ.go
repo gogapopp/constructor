@@ -26,7 +26,7 @@ func Base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-white dark:bg-zinc-900\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Constructor - Learn and Build Together\"><meta name=\"google\" content=\"notranslate\"><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><title>Constructor</title></head><body class=\"min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\" class=\"bg-white dark:bg-zinc-900\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"description\" content=\"Constructor - Learn and Build Together\"><meta name=\"google\" content=\"notranslate\"><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css\"><link rel=\"stylesheet\" href=\"/assets/css/styles.css\"><script src=\"https://unpkg.com/htmx.org@1.6.1\"></script><title>Constructor</title></head><body class=\"min-h-screen bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-50\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

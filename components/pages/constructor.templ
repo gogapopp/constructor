@@ -16,25 +16,6 @@ templ Constructor() {
                         <span class="text-lg font-bold text-zinc-900 dark:text-zinc-50">Constructor</span>
                     </a>
                 </div>
-                
-                <div class="flex items-center space-x-6">
-                    <div class="relative">
-                        <input 
-                            type="search" 
-                            placeholder="Search courses..." 
-                            class="w-64 px-4 py-2 rounded-lg
-                                   bg-zinc-50 dark:bg-zinc-800 
-                                   border border-zinc-200 dark:border-zinc-700
-                                   focus:border-black dark:focus:border-white
-                                   focus:ring-1 focus:ring-black dark:focus:ring-white
-                                   placeholder-zinc-400 dark:placeholder-zinc-500
-                                   transition-all duration-200"
-                            hx-post="/api/search"
-                            hx-trigger="keyup changed delay:500ms"
-                            hx-target="#courses-grid"
-                        >
-                    </div>
-                </div>
             </div>
         </div>
     </nav>
@@ -47,7 +28,7 @@ templ Constructor() {
                     <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">Available Courses</h1>
                     <p class="text-base text-zinc-600 dark:text-zinc-400">Start your learning journey today</p>
                 </div>
-                <a href="/course" 
+                <a href="/course/create" 
                    class="px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black
                           rounded-lg font-medium
                           hover:bg-zinc-800 dark:hover:bg-zinc-100
@@ -65,7 +46,7 @@ templ Constructor() {
         <!-- Course Grid -->
         <div id="courses-grid" 
              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-             hx-get="/api/courses" 
+             hx-get="/courses" 
              hx-trigger="load" 
              hx-indicator="#loading">
             

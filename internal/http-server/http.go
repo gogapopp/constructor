@@ -31,18 +31,14 @@ func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthSe
 		r.Get("/constructor", constructor.ConstructorPage(logger))
 		r.Post("/constructor", constructor.ConstructorPage(logger))
 
-		r.Get("/course", course.CoursePage(logger))
-		r.Post("/course", course.CoursePage(logger))
+		r.Get("/course/create", course.CourseCreationPage(logger))
+		r.Post("/course/create", course.CourseCreationPage(logger))
+
+		r.Get("/course/{id}", course.CoursePage(logger))
+		r.Post("/course/{id}", course.CoursePage(logger))
 
 		// code below needs to refactor
-		r.Get("/coursecreation", course.CourseCreationPage(logger))
-		r.Post("/coursecreation", course.CourseCreationPage(logger))
-
-		r.Get("/constructor/community", constructor.ConstructorPage(logger))
-		r.Post("/constructor/community", constructor.ConstructorPage(logger))
-
-		r.Get("/constructor/community/{id}", constructor.ConstructorPage(logger))
-		r.Post("/constructor/community/{id}", constructor.ConstructorPage(logger))
+		// r.Post("/courses", course.CoursesList())
 	})
 }
 

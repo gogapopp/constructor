@@ -41,22 +41,6 @@ func SignUpPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
 	}
 }
 
-func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
-	const op = "handlers.auth.SignInPage"
-	return func(w http.ResponseWriter, r *http.Request) {
-		ctx := r.Context()
-
-		switch r.Method {
-		case http.MethodPost:
-			handlePostSignIn(ctx, w, r, logger, a, op)
-		case http.MethodGet:
-			handleGetSignIn(ctx, w, r, logger, op)
-		default:
-			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		}
-	}
-}
-
 func handlePostSignUp(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, a AuthService, op string) {
 	userName := r.FormValue("username")
 	userEmail := r.FormValue("email")
@@ -81,6 +65,42 @@ func handlePostSignUp(ctx context.Context, w http.ResponseWriter, r *http.Reques
 	}
 
 	http.Redirect(w, r, "/signin", http.StatusSeeOther)
+}
+
+func handleSignUpError(ctx context.Context, w http.ResponseWriter, logger *zap.SugaredLogger, op string, err error) {
+	logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
+	var errMsg string
+	switch {
+	case errors.Is(err, storage.ErrUserExists):
+		errMsg = "User already exists"
+	case errors.As(err, &valErr):
+		errMsg = "Email, password, and username are required fields"
+	case errors.Is(err, service.ErrUndefinedRole):
+		errMsg = "Undefined role (available roles: admin, user)"
+	default:
+		errMsg = "Something went wrong"
+	}
+	renderError(ctx, w, logger, op, errMsg, pages.SignUpBase, pages.SignUp)
+}
+
+func handleGetSignUp(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, op string) {
+	handleGetAuth(ctx, w, r, logger, op, pages.SignUpBase, pages.SignUp)
+}
+
+func SignInPage(logger *zap.SugaredLogger, a AuthService) http.HandlerFunc {
+	const op = "handlers.auth.SignInPage"
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		switch r.Method {
+		case http.MethodPost:
+			handlePostSignIn(ctx, w, r, logger, a, op)
+		case http.MethodGet:
+			handleGetSignIn(ctx, w, r, logger, op)
+		default:
+			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		}
+	}
 }
 
 func handlePostSignIn(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, a AuthService, op string) {
@@ -109,39 +129,8 @@ func handlePostSignIn(ctx context.Context, w http.ResponseWriter, r *http.Reques
 
 	http.Redirect(w, r, "/constructor", http.StatusSeeOther)
 }
-
-func handleGetSignUp(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, op string) {
-	handleGetAuth(ctx, w, r, logger, op, pages.SignUpBase, pages.SignUp)
-}
-
 func handleGetSignIn(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, op string) {
 	handleGetAuth(ctx, w, r, logger, op, pages.SignInBase, pages.SignIn)
-}
-
-func handleGetAuth(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, op string, basePage func(templ.Component) templ.Component, authPage func(string) templ.Component) {
-	var errMsg string
-	if r.URL.Query().Get("redirected") == "true" {
-		errMsg = "You need to sign in or sign up"
-	}
-	if err := render.Render(ctx, w, basePage(authPage(errMsg))); err != nil {
-		renderError(ctx, w, logger, op, "internal server error", basePage, authPage)
-	}
-}
-
-func handleSignUpError(ctx context.Context, w http.ResponseWriter, logger *zap.SugaredLogger, op string, err error) {
-	logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
-	var errMsg string
-	switch {
-	case errors.Is(err, storage.ErrUserExists):
-		errMsg = "User already exists"
-	case errors.As(err, &valErr):
-		errMsg = "Email, password, and username are required fields"
-	case errors.Is(err, service.ErrUndefinedRole):
-		errMsg = "Undefined role (available roles: admin, user)"
-	default:
-		errMsg = "Something went wrong"
-	}
-	renderError(ctx, w, logger, op, errMsg, pages.SignUpBase, pages.SignUp)
 }
 
 func handleSignInError(ctx context.Context, w http.ResponseWriter, logger *zap.SugaredLogger, op string, err error) {
@@ -162,5 +151,15 @@ func renderError(ctx context.Context, w http.ResponseWriter, logger *zap.Sugared
 	if err := render.Render(ctx, w, basePage(authPage(errMsg))); err != nil {
 		logger.Errorf("[%s] %s: %w", middleware.GetReqID(ctx), op, err)
 		http.Error(w, "internal server error", http.StatusInternalServerError)
+	}
+}
+
+func handleGetAuth(ctx context.Context, w http.ResponseWriter, r *http.Request, logger *zap.SugaredLogger, op string, basePage func(templ.Component) templ.Component, authPage func(string) templ.Component) {
+	var errMsg string
+	if r.URL.Query().Get("redirected") == "true" {
+		errMsg = "You need to sign in or sign up"
+	}
+	if err := render.Render(ctx, w, basePage(authPage(errMsg))); err != nil {
+		renderError(ctx, w, logger, op, "internal server error", basePage, authPage)
 	}
 }

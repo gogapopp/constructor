@@ -1,16 +1,14 @@
 package service
 
 import (
-	"log"
-	"time"
+	"constructor/internal/model"
+	"context"
 )
 
-func (c *courseService) StartCourseAccessExpirationCheck() {
-	ticker := time.NewTicker(1 * time.Hour)
-	go func() {
-		for range ticker.C {
-			err := c.courseStore.CheckAndExpireCourseAccess()
-			log.Print(err)
-		}
-	}()
+func (c *courseService) CreateCourse(ctx context.Context, course model.Course) error {
+	if err := c.validator.Struct(course); err != nil {
+		return err
+	}
+
+	return c.courseStore.CreateCourse(ctx, course)
 }
