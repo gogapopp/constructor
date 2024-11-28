@@ -16,7 +16,7 @@ import (
 
 const readHeaderTimeout = 10 * time.Second
 
-func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthService) {
+func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthService, courseService course.CourseService) {
 	r.Get("/", home.HomePage(logger))
 
 	r.Get("/signin", auth.SignInPage(logger, authService))
@@ -28,23 +28,23 @@ func initHandlers(r *chi.Mux, logger *zap.SugaredLogger, authService auth.AuthSe
 	r.Group(func(r chi.Router) {
 		r.Use(middlewares.AuthMiddleware)
 
-		r.Get("/constructor", constructor.ConstructorPage(logger))
-		r.Post("/constructor", constructor.ConstructorPage(logger))
+		r.Get("/constructor", constructor.ConstructorPage(logger, courseService))
+		r.Post("/constructor", constructor.ConstructorPage(logger, courseService))
 
-		r.Get("/course/create", course.CourseCreationPage(logger))
-		r.Post("/course/create", course.CourseCreationPage(logger))
+		r.Get("/course/create", course.CourseCreationPage(logger, courseService))
+		r.Post("/course/create", course.CourseCreationPage(logger, courseService))
 
-		r.Get("/course/{id}", course.CoursePage(logger))
-		r.Post("/course/{id}", course.CoursePage(logger))
+		r.Get("/course/{id}", course.CoursePage(logger, courseService))
+		r.Post("/course/{id}", course.CoursePage(logger, courseService))
 
 		// code below needs to refactor
 		// r.Post("/courses", course.CoursesList())
 	})
 }
 
-func New(r *chi.Mux, logger *zap.SugaredLogger, config *config.Config, authService auth.AuthService) *http.Server {
+func New(r *chi.Mux, logger *zap.SugaredLogger, config *config.Config, authService auth.AuthService, courseService course.CourseService) *http.Server {
 
-	initHandlers(r, logger, authService)
+	initHandlers(r, logger, authService, courseService)
 
 	httpSrv := &http.Server{
 		Addr:              config.HTTPConfig.Addr,

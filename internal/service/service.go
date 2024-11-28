@@ -24,6 +24,8 @@ type authService struct {
 
 type courseStorager interface {
 	CreateCourse(ctx context.Context, course model.Course) error
+	GetCourseByID(ctx context.Context, courseID int) (*model.Course, error)
+	GetAllCourses(ctx context.Context) ([]model.Course, error)
 }
 
 type courseService struct {

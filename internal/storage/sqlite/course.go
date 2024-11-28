@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 type courseStorage struct {
@@ -38,8 +39,8 @@ func (c *courseStorage) CreateCourse(ctx context.Context, course model.Course) e
 	}
 	defer tx.Rollback()
 
-	query := `INSERT INTO courses (title, description, creator_id, created_at, difficulty_level, cover_image) VALUES (?, ?, ?, ?, ?, ?)`
-	res, err := tx.ExecContext(ctx, query, course.Title, course.Description, course.CreatorID, course.CreatedAt, course.DifficultyLevel, course.CoverImage)
+	query := `INSERT INTO courses (title, description, creator_id, created_at, difficulty_level) VALUES (?, ?, ?, ?, ?)`
+	res, err := tx.ExecContext(ctx, query, course.Title, course.Description, course.CreatorID, course.CreatedAt, course.DifficultyLevel)
 	if err != nil {
 		return fmt.Errorf("failed to create course: %w", err)
 	}
@@ -71,4 +72,170 @@ func (c *courseStorage) CreateCourse(ctx context.Context, course model.Course) e
 	}
 
 	return tx.Commit()
+}
+
+func (c *courseStorage) GetCourseByID(ctx context.Context, courseID int) (*model.Course, error) {
+	// Retrieve course details
+	courseQuery := `
+		SELECT 
+			title, 
+			description, 
+			creator_id, 
+			created_at, 
+			difficulty_level
+		FROM courses 
+		WHERE course_id = ?
+	`
+	var course model.Course
+	var createdAtStr string
+
+	err := c.conn.QueryRowContext(ctx, courseQuery, courseID).Scan(
+		&course.Title,
+		&course.Description,
+		&course.CreatorID,
+		&createdAtStr,
+		&course.DifficultyLevel,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("course not found")
+		}
+		return nil, fmt.Errorf("query course: %w", err)
+	}
+
+	// Parse created_at timestamp
+	course.CreatedAt, err = time.Parse("2006-01-02 15:04:05.9999999-07:00", createdAtStr)
+	if err != nil {
+		return nil, fmt.Errorf("parse created_at: %w", err)
+	}
+	// Retrieve modules
+	modulesQuery := `
+		SELECT 
+			module_id,
+			title, 
+			description
+		FROM course_modules 
+		WHERE course_id = ?
+		ORDER BY order_index
+	`
+	rows, err := c.conn.QueryContext(ctx, modulesQuery, courseID)
+	if err != nil {
+		return nil, fmt.Errorf("query modules: %w", err)
+	}
+	defer rows.Close()
+
+	var modules []model.Module
+	for rows.Next() {
+		var module model.Module
+		var moduleID int
+		if err := rows.Scan(&moduleID, &module.Title, &module.Description); err != nil {
+			return nil, fmt.Errorf("scan module: %w", err)
+		}
+
+		// Retrieve lessons for each module (if needed)
+		// Note: This is a placeholder. You'd need to create a lessons table
+		// and implement lesson retrieval similar to module retrieval
+		module.Lessons = []model.Lesson{} // Placeholder for lessons
+
+		modules = append(modules, module)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	course.Modules = modules
+	return &course, nil
+}
+
+func (c *courseStorage) GetAllCourses(ctx context.Context) ([]model.Course, error) {
+	query := `
+		SELECT
+			course_id,
+			title,
+			description,
+			creator_id,
+			created_at,
+			difficulty_level
+		FROM courses
+	`
+	rows, err := c.conn.QueryContext(ctx, query)
+	if err != nil {
+		return nil, fmt.Errorf("query courses: %w", err)
+	}
+	defer rows.Close()
+
+	var courses []model.Course
+	for rows.Next() {
+		var course model.Course
+		var createdAtStr string
+		if err := rows.Scan(
+			&course.ID,
+			&course.Title,
+			&course.Description,
+			&course.CreatorID,
+			&createdAtStr,
+			&course.DifficultyLevel,
+		); err != nil {
+			return nil, fmt.Errorf("scan course: %w", err)
+		}
+
+		course.CreatedAt, err = time.Parse("2006-01-02 15:04:05.9999999-07:00", createdAtStr)
+		if err != nil {
+			return nil, fmt.Errorf("parse created_at: %w", err)
+		}
+
+		modules, err := c.getModulesByCourseID(ctx, course.ID)
+		if err != nil {
+			return nil, fmt.Errorf("get modules: %w", err)
+		}
+		course.Modules = modules
+
+		courses = append(courses, course)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	return courses, nil
+}
+
+func (c *courseStorage) getModulesByCourseID(ctx context.Context, courseID int) ([]model.Module, error) {
+	query := `
+		SELECT
+			module_id,
+			title,
+			description
+		FROM course_modules
+		WHERE course_id = ?
+		ORDER BY order_index
+	`
+	rows, err := c.conn.QueryContext(ctx, query, courseID)
+	if err != nil {
+		return nil, fmt.Errorf("query modules: %w", err)
+	}
+	defer rows.Close()
+
+	var modules []model.Module
+	for rows.Next() {
+		var module model.Module
+		var moduleID int
+		if err := rows.Scan(&moduleID, &module.Title, &module.Description); err != nil {
+			return nil, fmt.Errorf("scan module: %w", err)
+		}
+
+		// Retrieve lessons for each module (if needed)
+		// Note: This is a placeholder. You'd need to create a lessons table
+		// and implement lesson retrieval similar to module retrieval
+		module.Lessons = []model.Lesson{} // Placeholder for lessons
+
+		modules = append(modules, module)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	return modules, nil
 }

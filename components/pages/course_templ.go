@@ -8,9 +8,13 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "constructor/components"
+import (
+	"constructor/components"
+	"constructor/internal/model"
+	"strconv"
+)
 
-func Course() templ.Component {
+func Course(course *model.Course) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -28,34 +32,121 @@ func Course() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-white dark:bg-zinc-900\"><!-- Navigation --><nav class=\"fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50\"><div class=\"max-w-6xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-4\"><a href=\"/\" class=\"flex items-center space-x-3\"><div class=\"w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center\"><span class=\"text-white dark:text-black text-lg font-bold\">C</span></div><span class=\"text-lg font-bold text-zinc-900 dark:text-zinc-50\">Constructor</span></a></div></div></div></nav><!-- Main Content --><main class=\"pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto\"><header class=\"mb-8\"><h1 class=\"text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3\">Web Development Course</h1><p class=\"text-base text-zinc-600 dark:text-zinc-400\">Learn web development from scratch</p></header><!-- Two-column Layout --><div class=\"flex gap-8\"><!-- Left Sidebar - Course Topics --><div class=\"w-1/3\"><div class=\"bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden\"><div class=\"p-4 border-b border-zinc-200 dark:border-zinc-700\"><h2 class=\"text-lg font-semibold text-zinc-900 dark:text-zinc-50\">Course Content</h2></div><!-- Topics List --><div class=\"divide-y divide-zinc-200 dark:divide-zinc-700\"><button class=\"w-full p-4 text-left hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors\r\n                                       flex items-center justify-between group\" hx-get=\"/api/course/topic/1\" hx-target=\"#topic-content\"><div class=\"flex items-center space-x-3\"><div class=\"w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center\"><span class=\"text-sm font-medium text-zinc-900 dark:text-zinc-50\">1</span></div><div><h3 class=\"font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-black dark:group-hover:text-white\">Introduction to HTML</h3><p class=\"text-sm text-zinc-500 dark:text-zinc-400\">4 lessons • 45 min</p></div></div><svg class=\"w-5 h-5 text-zinc-400 dark:text-zinc-500 group-hover:text-black dark:group-hover:text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path></svg></button> <button class=\"w-full p-4 text-left hover:bg-zinc-50 dark:hover:bg-zinc-700/50 transition-colors\r\n                                       flex items-center justify-between group\" hx-get=\"/api/course/topic/2\" hx-target=\"#topic-content\"><div class=\"flex items-center space-x-3\"><div class=\"w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center\"><span class=\"text-sm font-medium text-zinc-900 dark:text-zinc-50\">2</span></div><div><h3 class=\"font-medium text-zinc-900 dark:text-zinc-50 group-hover:text-black dark:group-hover:text-white\">CSS Fundamentals</h3><p class=\"text-sm text-zinc-500 dark:text-zinc-400\">6 lessons • 60 min</p></div></div><svg class=\"w-5 h-5 text-zinc-400 dark:text-zinc-500 group-hover:text-black dark:group-hover:text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path></svg></button></div></div></div><!-- Right Content Area --><div class=\"w-2/3\"><div id=\"topic-content\" class=\"bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700\"><!-- Initial State or Loading State --><div class=\"p-6\" id=\"initial-state\"><div class=\"text-center text-zinc-500 dark:text-zinc-400 py-12\"><svg class=\"w-12 h-12 mx-auto mb-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122\"></path></svg><p class=\"text-lg font-medium\">Select a topic to start learning</p></div></div></div></div></div></main></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-white dark:bg-zinc-900\"><nav class=\"fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50\"><div class=\"max-w-6xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-4\"><a href=\"/\" class=\"flex items-center space-x-3\"><div class=\"w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center\"><span class=\"text-white dark:text-black text-lg font-bold\">C</span></div><span class=\"text-lg font-bold text-zinc-900 dark:text-zinc-50\">Constructor</span></a></div></div></div></nav><main class=\"pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto\"><header class=\"mb-8\"><h1 class=\"text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		return templ_7745c5c3_Err
-	})
-}
-
-// Template for Topic Content
-func TopicContent(topicID string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(course.Title)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 29, Col: 34}
 		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
-		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"p-6\"><div class=\"mb-8\"><h2 class=\"text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-3\">Introduction to HTML</h2><p class=\"text-zinc-600 dark:text-zinc-400\">Learn the basics of HTML structure and elements</p></div><!-- Video Materials --><div class=\"mb-8\"><h3 class=\"text-lg font-medium text-zinc-900 dark:text-zinc-50 mb-4 flex items-center\"><svg class=\"w-5 h-5 mr-2 text-zinc-500 dark:text-zinc-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"></path></svg> Video Materials</h3><div class=\"space-y-3\"><button class=\"w-full flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg\r\n                              hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all duration-200 group\"><div class=\"flex items-center space-x-3\"><svg class=\"w-6 h-6 text-zinc-400 group-hover:text-black dark:text-zinc-500 dark:group-hover:text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z\"></path> <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"></path></svg> <span class=\"text-zinc-900 dark:text-zinc-50\">HTML Basics Introduction</span></div><span class=\"text-sm text-zinc-500 dark:text-zinc-400\">10:15</span></button></div></div><!-- Text Materials --><div><h3 class=\"text-lg font-medium text-zinc-900 dark:text-zinc-50 mb-4 flex items-center\"><svg class=\"w-5 h-5 mr-2 text-zinc-500 dark:text-zinc-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\"></path></svg> Text Materials</h3><div class=\"space-y-3\"><button class=\"w-full flex justify-between items-center p-4 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg\r\n                              hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all duration-200 group\"><div class=\"flex items-center space-x-3\"><svg class=\"w-6 h-6 text-zinc-400 group-hover:text-black dark:text-zinc-500 dark:group-hover:text-white\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z\"></path></svg> <span class=\"text-zinc-900 dark:text-zinc-50\">HTML Structure Guide</span></div><span class=\"text-sm text-zinc-500 dark:text-zinc-400\">5 min read</span></button></div></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h1><p class=\"text-base text-zinc-600 dark:text-zinc-400 mb-2\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var3 string
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(course.Description)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 32, Col: 40}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><div class=\"flex items-center space-x-4 text-sm text-zinc-500\"><span>Difficulty: ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var4 string
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(course.DifficultyLevel)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 35, Col: 62}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <span>Created: ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(course.CreatedAt.Format("2006-01-02"))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 36, Col: 74}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span> <span>Creator ID: ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var6 string
+		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(course.CreatorID))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 37, Col: 70}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</span></div></header><div class=\"bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6\"><h2 class=\"text-xl font-semibold mb-4\">Course Modules</h2><div class=\"space-y-4\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for index, module := range course.Modules {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"border-b pb-4 last:border-b-0\"><h3 class=\"font-medium text-zinc-900 dark:text-zinc-50\">Module ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(index + 1))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 47, Col: 64}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(": ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 string
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(module.Title)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 47, Col: 82}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h3><p class=\"text-zinc-600 dark:text-zinc-400 mb-2\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(module.Description)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/course.templ`, Line: 50, Col: 52}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></main></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -76,12 +167,12 @@ func CourseBase(cmp templ.Component) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
+		templ_7745c5c3_Var10 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var10 == nil {
+			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var4 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var11 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -99,7 +190,7 @@ func CourseBase(cmp templ.Component) templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = components.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var4), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = components.Base().Render(templ.WithChildren(ctx, templ_7745c5c3_Var11), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

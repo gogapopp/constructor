@@ -34,6 +34,7 @@ func New(dsn string) (*sql.DB, error) {
 	_, err = tx.Exec(sqlembed.CoursesTable)
 	_, err = tx.Exec(sqlembed.CourseModulesTable)
 	_, err = tx.Exec(sqlembed.CourseAccessTable)
+	_, err = tx.Exec(sqlembed.CourseLessonsTable)
 
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", op, err)

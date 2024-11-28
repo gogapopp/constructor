@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS courses (
     status TEXT DEFAULT 'draft',
     difficulty_level TEXT,
     price REAL DEFAULT 0,
-    cover_image_url TEXT,
     parent_course_id INTEGER,
     metadata TEXT,
     FOREIGN KEY (parent_course_id) REFERENCES courses(course_id)

@@ -19,12 +19,12 @@ func main() {
 		logger = must(logger.New())
 		config = must(config.New(".env"))
 
-		path   = must(sqlite.New("storage.db"))
-		authDB = sqlite.NewAuthStorage(path)
-		// coursesDB = sqlite.NewCourseStorage(path)
+		path      = must(sqlite.New("storage.db"))
+		authDB    = sqlite.NewAuthStorage(path)
+		coursesDB = sqlite.NewCourseStorage(path)
 
-		authService = service.NewAuthService(config.PASS_SECRET, config.JWT_SECRET, authDB)
-		// courseService = service.NewCourseService(coursesDB)
+		authService   = service.NewAuthService(config.PASS_SECRET, config.JWT_SECRET, authDB)
+		courseService = service.NewCourseService(coursesDB)
 
 		r = chi.NewRouter()
 	)
@@ -38,7 +38,7 @@ func main() {
 	)
 
 	// Initializes server routes and returns a completed http server.
-	server := httpserver.New(r, logger, config, authService)
+	server := httpserver.New(r, logger, config, authService, courseService)
 
 	// courseService.StartCourseAccessExpirationCheck()
 

@@ -22,12 +22,12 @@ type (
 )
 
 type Course struct {
+	ID              int       `json:"id"`
 	Title           string    `json:"title" validate:"required"`
 	Description     string    `json:"description" validate:"required"`
 	CreatorID       int       `json:"creator_id" validate:"required"`
 	CreatedAt       time.Time `json:"created_at" validate:"required"`
 	DifficultyLevel string    `json:"difficulty_level" validate:"required"`
-	CoverImage      string    `json:"cover_image"`
 	Modules         []Module  `json:"modules"`
 }
 

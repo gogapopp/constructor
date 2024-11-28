@@ -2,34 +2,60 @@ package course
 
 import (
 	"constructor/components/pages"
-	"constructor/internal/http-server/middlewares"
 	"constructor/internal/lib/render"
+	"constructor/internal/model"
+	"context"
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	"go.uber.org/zap"
 )
 
-func CoursePage(logger *zap.SugaredLogger) http.HandlerFunc {
+type CourseService interface {
+	CreateCourse(ctx context.Context, course model.Course) error
+	GetCourseByID(ctx context.Context, courseID int) (*model.Course, error)
+	GetAllCourses(ctx context.Context) ([]model.Course, error)
+}
+
+func CoursePage(logger *zap.SugaredLogger, courseService CourseService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		_ = ctx
+
 		switch r.Method {
 		case http.MethodGet:
-			v, ok := r.Context().Value(middlewares.UserIDKey).(string)
-			if !ok {
-				http.Error(w, "internal server error", http.StatusInternalServerError)
+			// extract courseID from URL or query parameter
+			courseIDStr := chi.URLParam(r, "id")
+			courseID, err := strconv.Atoi(courseIDStr)
+			if err != nil {
+				http.Error(w, "invalid course ID", http.StatusBadRequest)
 				return
 			}
-			_ = v
-			// TODO:
-			if err := render.Render(r.Context(), w, pages.CourseBase(pages.Course())); err != nil {
+
+			// fetch course data
+			course, err := courseService.GetCourseByID(ctx, courseID)
+			if err != nil {
+				logger.Errorf("Failed to fetch course: %v", err)
+				http.Error(w, "failed to retrieve course", http.StatusInternalServerError)
+				return
+			}
+
+			logger.Infoln(course.Title, course.Description, course.DifficultyLevel, course.CreatedAt, course.CreatorID, course.Modules)
+			logger.Infoln(course.Modules[1].Description, course.Modules[1].Lessons, course.Modules[1].Title)
+
+			// render the page with course data
+			if err := render.Render(ctx, w, pages.CourseBase(pages.Course(course))); err != nil {
+				logger.Errorf("Failed to render course page: %v", err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}
 
+		case http.MethodPost:
+			// handle course-related POST requests if needed
+			http.Error(w, "not implemented", http.StatusNotImplemented)
+
 		default:
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-			return
 		}
 	}
 }
