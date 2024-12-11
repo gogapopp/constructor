@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -66,7 +66,7 @@ func DownloadCourseHandler(logger *zap.SugaredLogger) http.HandlerFunc {
 		}
 
 		// Read the response body
-		htmlContent, err := ioutil.ReadAll(resp.Body)
+		htmlContent, err := io.ReadAll(resp.Body)
 		if err != nil {
 			logger.Error(err, "Failed to read response body")
 			http.Error(w, "Internal server error", http.StatusInternalServerError)

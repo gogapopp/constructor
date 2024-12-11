@@ -5,10 +5,12 @@ import (
     "constructor/internal/model"
     "constructor/components"
     "fmt"
+    "strings"
 )
 
 templ Course(course *model.Course) {
     <div class="min-h-screen bg-white dark:bg-zinc-900">
+        <!-- Навигационная панель -->
         <nav class="fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center h-16">
@@ -27,6 +29,7 @@ templ Course(course *model.Course) {
             </div>
         </nav>
 
+        <!-- Основной контент -->
         <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
             <header class="mb-8">
                 <h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">
@@ -40,11 +43,12 @@ templ Course(course *model.Course) {
                     <span>Дата создания: { course.CreatedAt.Format("2006-01-02") }</span>
                     <span>ID Создателя: { strconv.Itoa(course.CreatorID) }</span>
                 </div>
-                  <div class="mt-8">
-            <a href={ templ.SafeURL(fmt.Sprintf("/course/download/%d", course.ID)) } class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">Скачать курс</a>
-        </div>
+                <div class="mt-8">
+                    <a href={ templ.SafeURL(fmt.Sprintf("/course/download/%d", course.ID)) } class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">Скачать курс</a>
+                </div>
             </header>
 
+            <!-- Модули курса -->
             <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
                 <h2 class="text-xl font-semibold mb-4">Модули курса</h2>
                 <div class="space-y-4">
@@ -54,10 +58,10 @@ templ Course(course *model.Course) {
                                 Модуль { strconv.Itoa(index + 1) }: { module.Title }
                             </h3>
                             <p class="text-zinc-600 dark:text-zinc-400 mb-2">
-                                { module.Description }
+                                @templ.Raw(strings.Replace(module.Description, "\n", "<br>", -1))
                             </p>
                             <div class="text-sm text-zinc-500">
-                                Lessons: { strconv.Itoa(len(module.Lessons)) }
+                                Кол-во уроков: { strconv.Itoa(len(module.Lessons)) }
                             </div>
                             <div class="mt-4">
                                 <h4 class="text-lg font-medium">Уроки</h4>
@@ -69,11 +73,12 @@ templ Course(course *model.Course) {
                                                 <div class="aspect-w-16 aspect-h-9">
                                                     <iframe width="560" height="315" src={ lesson.VideoURL } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                                                 </div>
+                                                <p class="text-zinc-600 dark:text-zinc-400 mt-2">@templ.Raw(strings.Replace(lesson.Content, "\n", "<br>", -1))</p>
                                             } else if lesson.Type == "text" {
-                                                <p class="text-zinc-600 dark:text-zinc-400 mt-2">{ lesson.Content }</p>
+                                                <p class="text-zinc-600 dark:text-zinc-400 mt-2">@templ.Raw(strings.Replace(lesson.Content, "\n", "<br>", -1))</p>
                                             } else if lesson.Type == "quiz" {
                                                 <div class="mt-2">
-                                                    <p class="text-zinc-600 dark:text-zinc-400">{ lesson.Content }</p>
+                                                    <p class="text-zinc-600 dark:text-zinc-400">@templ.Raw(strings.Replace(lesson.Content, "\n", "<br>", -1))</p>
                                                     <a href={ templ.SafeURL(fmt.Sprintf("%s", lesson.ResourceURL)) } class="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg">Пройти тест</a>
                                                 </div>
                                             } else {
