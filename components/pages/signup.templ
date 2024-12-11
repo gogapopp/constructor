@@ -15,8 +15,8 @@ templ SignUp(errMsg string) {
 
                 /* Header with improved typography */
                 <div class="text-center space-y-2">
-                    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900">Create your account</h1>
-                    <p class="text-base text-gray-500">Enter your details to get started</p>
+                    <h1 class="text-2xl md:text-3xl font-semibold tracking-tight text-gray-900">Создайте свою учетную запись</h1>
+                    <p class="text-base text-gray-500">Введите свои данные, чтобы начать</p>
                 </div>
 
                 /* Error message with refined styling */
@@ -28,7 +28,7 @@ templ SignUp(errMsg string) {
                                 class="ml-auto text-sm text-red-700 hover:text-red-900 underline transition-colors" 
                                 onclick="window.location.href='/signin'"
                             >
-                                Sign in instead
+                                Вместо этого войдите в систему
                             </button>
                         </div>
                     </div>
@@ -51,7 +51,7 @@ templ SignUp(errMsg string) {
                                 maxlength="64"
                                 placeholder="Choose a username"
                             />
-                            <p class="mt-1 text-sm text-gray-500">Must be 4-64 characters long</p>
+                            <p class="mt-1 text-sm text-gray-500">Длина должна составлять от 4 до 64 символов</p>
                         </div>
 
                         <div class="space-y-1">
@@ -70,7 +70,7 @@ templ SignUp(errMsg string) {
                         </div>
 
                         <div class="space-y-1">
-                            <label class="block text-sm font-medium text-gray-700">Password</label>
+                            <label class="block text-sm font-medium text-gray-700">Пароль</label>
                             <input 
                                 class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 
                                        placeholder-gray-400
@@ -82,11 +82,11 @@ templ SignUp(errMsg string) {
                                 minlength="6"
                                 placeholder="Create a password"
                             />
-                            <p class="mt-1 text-sm text-gray-500">Must be at least 6 characters</p>
+                            <p class="mt-1 text-sm text-gray-500">Должно быть не менее 6 символов</p>
                         </div>
 
                         <div class="space-y-1">
-                            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                            <label class="block text-sm font-medium text-gray-700">Подтвердите пароль</label>
                             <input 
                                 class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 
                                        placeholder-gray-400
@@ -125,19 +125,19 @@ templ SignUp(errMsg string) {
                                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900" 
                         type="submit"
                     >
-                        Create Account
+                        Создать аккаунт
                     </button>
                 </form>
 
                 /* Footer links */
                 <div class="text-center">
                     <p class="text-sm text-gray-500">
-                        Already have an account?
+                        У вас уже есть учетная запись?
                         <button 
                             onclick="window.location.href='/signin'" 
                             class="ml-1 text-black hover:text-gray-900 underline transition-colors"
                         >
-                            Sign in
+                            Зарегистрироваться
                         </button>
                     </p>
                 </div>

@@ -4,6 +4,7 @@ import (
     "strconv"
     "constructor/internal/model"
     "constructor/components"
+    "fmt"
 )
 
 templ Course(course *model.Course) {
@@ -18,6 +19,9 @@ templ Course(course *model.Course) {
                             </div>
                             <span class="text-lg font-bold text-zinc-900 dark:text-zinc-50">Constructor</span>
                         </a>
+                        <div>
+                            <a href="/constructor" class="px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black font-medium rounded-lg hover:bg-zinc-800 dark:hover:bg-zinc-100 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">Назад</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32,26 +36,53 @@ templ Course(course *model.Course) {
                     { course.Description }
                 </p>
                 <div class="flex items-center space-x-4 text-sm text-zinc-500">
-                    <span>Difficulty: { course.DifficultyLevel }</span>
-                    <span>Created: { course.CreatedAt.Format("2006-01-02") }</span>
-                    <span>Creator ID: { strconv.Itoa(course.CreatorID) }</span>
+                    <span>Сложность: { course.DifficultyLevel }</span>
+                    <span>Дата создания: { course.CreatedAt.Format("2006-01-02") }</span>
+                    <span>ID Создателя: { strconv.Itoa(course.CreatorID) }</span>
                 </div>
+                  <div class="mt-8">
+            <a href={ templ.SafeURL(fmt.Sprintf("/course/download/%d", course.ID)) } class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]">Скачать курс</a>
+        </div>
             </header>
 
             <div class="bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700 p-6">
-                <h2 class="text-xl font-semibold mb-4">Course Modules</h2>
+                <h2 class="text-xl font-semibold mb-4">Модули курса</h2>
                 <div class="space-y-4">
                     for index, module := range course.Modules {
                         <div class="border-b pb-4 last:border-b-0">
                             <h3 class="font-medium text-zinc-900 dark:text-zinc-50">
-                                Module { strconv.Itoa(index + 1) }: { module.Title }
+                                Модуль { strconv.Itoa(index + 1) }: { module.Title }
                             </h3>
                             <p class="text-zinc-600 dark:text-zinc-400 mb-2">
                                 { module.Description }
                             </p>
-                            // <div class="text-sm text-zinc-500">
-                            //     Lessons: { strconv.Itoa(len(module.Lessons)) }
-                            // </div>
+                            <div class="text-sm text-zinc-500">
+                                Lessons: { strconv.Itoa(len(module.Lessons)) }
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="text-lg font-medium">Уроки</h4>
+                                <div class="space-y-4">
+                                    for _, lesson := range module.Lessons {
+                                        <div class="p-4 bg-zinc-100 dark:bg-zinc-700 rounded-lg">
+                                            <h5 class="text-xl font-semibold">{ lesson.Title }</h5>
+                                            if lesson.Type == "video" {
+                                                <div class="aspect-w-16 aspect-h-9">
+                                                    <iframe width="560" height="315" src={ lesson.VideoURL } title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                                </div>
+                                            } else if lesson.Type == "text" {
+                                                <p class="text-zinc-600 dark:text-zinc-400 mt-2">{ lesson.Content }</p>
+                                            } else if lesson.Type == "quiz" {
+                                                <div class="mt-2">
+                                                    <p class="text-zinc-600 dark:text-zinc-400">{ lesson.Content }</p>
+                                                    <a href={ templ.SafeURL(fmt.Sprintf("%s", lesson.ResourceURL)) } class="mt-2 inline-block px-4 py-2 bg-blue-600 text-white rounded-lg">Пройти тест</a>
+                                                </div>
+                                            } else {
+                                                <p class="text-zinc-600 dark:text-zinc-400 mt-2">Тип урока не определен</p>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>

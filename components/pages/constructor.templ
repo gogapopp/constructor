@@ -29,8 +29,8 @@ templ Constructor(courses []model.Course, urls []string) {
 			<header class="mb-12">
 				<div class="flex justify-between items-center mb-12">
 					<div>
-						<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">Available Courses</h1>
-						<p class="text-base text-zinc-600 dark:text-zinc-400">Start your learning journey today</p>
+						<h1 class="text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3">Доступные курсы</h1>
+						<p class="text-base text-zinc-600 dark:text-zinc-400">Начните учиться уже сегодня</p>
 					</div>
 					<a href="/course/create"
 					   class="px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black
@@ -42,7 +42,7 @@ templ Constructor(courses []model.Course, urls []string) {
 						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 						</svg>
-						<span>Create Course</span>
+						<span>Создать курс</span>
 					</a>
 				</div>
 			</header>
@@ -55,7 +55,7 @@ templ Constructor(courses []model.Course, urls []string) {
 				 hx-indicator="#loading">
 
 				<!-- Course Cards -->
-				for i, course := range courses {
+				for _, course := range courses {
 				<div class="group bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700
 							hover:border-black dark:hover:border-white
 							transition-all duration-200">
@@ -82,14 +82,15 @@ templ Constructor(courses []model.Course, urls []string) {
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 										  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
 								</svg>
-								<span class="text-sm text-zinc-500 dark:text-zinc-400">{ fmt.Sprintf("%d",len(course.Modules)) } lessons </span>
+								<span class="text-sm text-zinc-500 dark:text-zinc-400">{ fmt.Sprintf("%d",len(course.Modules)) } модули </span>
 							</span>
-                            <a href={ templ.SafeURL(urls[i]) } class="px-4 py-2 bg-black dark:bg-white
+							// templ.SafeURL(urls[i])
+                            <a href={ templ.SafeURL(fmt.Sprintf("course/%d", course.ID)) } class="px-4 py-2 bg-black dark:bg-white
 										text-white dark:text-black text-sm font-medium rounded-lg
 										hover:bg-zinc-800 dark:hover:bg-zinc-100
 										transform transition-all duration-200
 										hover:scale-[1.02] active:scale-[0.98]">
-								Start
+								Начать
 							</a>
 						</div>
 					</div>

@@ -24,26 +24,22 @@ func CoursePage(logger *zap.SugaredLogger, courseService CourseService) http.Han
 
 		switch r.Method {
 		case http.MethodGet:
-			// extract courseID from URL or query parameter
 			courseIDStr := chi.URLParam(r, "id")
 			courseID, err := strconv.Atoi(courseIDStr)
 			if err != nil {
 				http.Error(w, "invalid course ID", http.StatusBadRequest)
 				return
 			}
-
-			// fetch course data
 			course, err := courseService.GetCourseByID(ctx, courseID)
 			if err != nil {
-				logger.Errorf("Failed to fetch course: %v", err)
+				logger.Errorf("failed to fetch course: %v", err)
 				http.Error(w, "failed to retrieve course", http.StatusInternalServerError)
 				return
 			}
 
 			logger.Infoln(course.Title, course.Description, course.DifficultyLevel, course.CreatedAt, course.CreatorID, course.Modules)
-			logger.Infoln(course.Modules[1].Description, course.Modules[1].Lessons, course.Modules[1].Title)
+			// logger.Infoln(course.Modules[1].Description, course.Modules[1].Lessons, course.Modules[1].Title)
 
-			// render the page with course data
 			if err := render.Render(ctx, w, pages.CourseBase(pages.Course(course))); err != nil {
 				logger.Errorf("Failed to render course page: %v", err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
@@ -51,7 +47,6 @@ func CoursePage(logger *zap.SugaredLogger, courseService CourseService) http.Han
 			}
 
 		case http.MethodPost:
-			// handle course-related POST requests if needed
 			http.Error(w, "not implemented", http.StatusNotImplemented)
 
 		default:

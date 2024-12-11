@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -77,19 +78,21 @@ func (c *courseStorage) CreateCourse(ctx context.Context, course model.Course) e
 func (c *courseStorage) GetCourseByID(ctx context.Context, courseID int) (*model.Course, error) {
 	// Retrieve course details
 	courseQuery := `
-		SELECT 
-			title, 
-			description, 
-			creator_id, 
-			created_at, 
-			difficulty_level
-		FROM courses 
-		WHERE course_id = ?
-	`
+        SELECT 
+            course_id, 
+            title, 
+            description, 
+            creator_id, 
+            created_at, 
+            difficulty_level
+        FROM courses 
+        WHERE course_id = ?
+    `
 	var course model.Course
 	var createdAtStr string
 
 	err := c.conn.QueryRowContext(ctx, courseQuery, courseID).Scan(
+		&course.ID,
 		&course.Title,
 		&course.Description,
 		&course.CreatorID,
@@ -108,16 +111,17 @@ func (c *courseStorage) GetCourseByID(ctx context.Context, courseID int) (*model
 	if err != nil {
 		return nil, fmt.Errorf("parse created_at: %w", err)
 	}
+
 	// Retrieve modules
 	modulesQuery := `
-		SELECT 
-			module_id,
-			title, 
-			description
-		FROM course_modules 
-		WHERE course_id = ?
-		ORDER BY order_index
-	`
+        SELECT 
+            module_id,
+            title, 
+            description
+        FROM course_modules 
+        WHERE course_id = ?
+        ORDER BY order_index
+    `
 	rows, err := c.conn.QueryContext(ctx, modulesQuery, courseID)
 	if err != nil {
 		return nil, fmt.Errorf("query modules: %w", err)
@@ -125,23 +129,81 @@ func (c *courseStorage) GetCourseByID(ctx context.Context, courseID int) (*model
 	defer rows.Close()
 
 	var modules []model.Module
+	var moduleIDs []int
 	for rows.Next() {
 		var module model.Module
 		var moduleID int
 		if err := rows.Scan(&moduleID, &module.Title, &module.Description); err != nil {
 			return nil, fmt.Errorf("scan module: %w", err)
 		}
-
-		// Retrieve lessons for each module (if needed)
-		// Note: This is a placeholder. You'd need to create a lessons table
-		// and implement lesson retrieval similar to module retrieval
-		module.Lessons = []model.Lesson{} // Placeholder for lessons
-
+		module.ModuleID = moduleID
 		modules = append(modules, module)
+		moduleIDs = append(moduleIDs, moduleID)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("rows error: %w", err)
+	}
+
+	// Retrieve lessons for all modules
+	if len(moduleIDs) == 0 {
+		course.Modules = modules
+		return &course, nil
+	}
+
+	// Create placeholders
+	placeholderSlice := make([]string, len(moduleIDs))
+	for i := range placeholderSlice {
+		placeholderSlice[i] = "?"
+	}
+	placeholders := strings.Join(placeholderSlice, ",")
+
+	// Create lessons query
+	lessonsQuery := fmt.Sprintf(`
+    SELECT 
+        lesson_id,
+        module_id,
+        title,
+        type,
+        content,
+        video_url,
+        resource_url
+    FROM course_lessons
+    WHERE module_id IN (%s)
+`, placeholders)
+
+	// Prepare arguments for query
+	args := make([]any, len(moduleIDs))
+	for i, id := range moduleIDs {
+		args[i] = id
+	}
+
+	// Execute query
+	lessonRows, err := c.conn.QueryContext(ctx, lessonsQuery, args...)
+	if err != nil {
+		return nil, fmt.Errorf("query lessons: %w", err)
+	}
+	defer lessonRows.Close()
+
+	lessonsMap := make(map[int][]model.Lesson)
+	for lessonRows.Next() {
+		var lesson model.Lesson
+		var moduleID int
+		if err := lessonRows.Scan(&lesson.LessonID, &moduleID, &lesson.Title, &lesson.Type, &lesson.Content, &lesson.VideoURL, &lesson.ResourceURL); err != nil {
+			return nil, fmt.Errorf("scan lesson: %w", err)
+		}
+		lessonsMap[moduleID] = append(lessonsMap[moduleID], lesson)
+	}
+
+	if err := lessonRows.Err(); err != nil {
+		return nil, fmt.Errorf("lesson rows error: %w", err)
+	}
+
+	// Assign lessons to modules
+	for i, module := range modules {
+		if lessons, ok := lessonsMap[module.ModuleID]; ok {
+			modules[i].Lessons = lessons
+		}
 	}
 
 	course.Modules = modules

@@ -32,11 +32,11 @@ func Constructor(courses []model.Course, urls []string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-white dark:bg-zinc-900\"><!-- Navigation --><nav class=\"fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50\"><div class=\"max-w-6xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-4\"><a href=\"/\" class=\"flex items-center space-x-3\"><div class=\"w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center\"><span class=\"text-white dark:text-black text-lg font-bold\">C</span></div><span class=\"text-lg font-bold text-zinc-900 dark:text-zinc-50\">Constructor</span></a></div></div></div></nav><!-- Main Content --><main class=\"pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto\"><header class=\"mb-12\"><div class=\"flex justify-between items-center mb-12\"><div><h1 class=\"text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3\">Available Courses</h1><p class=\"text-base text-zinc-600 dark:text-zinc-400\">Start your learning journey today</p></div><a href=\"/course/create\" class=\"px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black\r\n\t\t\t\t\t\t\t  rounded-lg font-medium\r\n\t\t\t\t\t\t\t  hover:bg-zinc-800 dark:hover:bg-zinc-100\r\n\t\t\t\t\t\t\t  transform transition-all duration-200\r\n\t\t\t\t\t\t\t  hover:scale-[1.02] active:scale-[0.98]\r\n\t\t\t\t\t\t\t  flex items-center space-x-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 6v6m0 0v6m0-6h6m-6 0H6\"></path></svg> <span>Create Course</span></a></div></header><!-- Course Grid --><div id=\"courses-grid\" class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\" hx-get=\"/courses\" hx-trigger=\"load\" hx-indicator=\"#loading\"><!-- Course Cards -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"min-h-screen bg-white dark:bg-zinc-900\"><!-- Navigation --><nav class=\"fixed top-0 w-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800 z-50\"><div class=\"max-w-6xl mx-auto px-4 sm:px-6 lg:px-8\"><div class=\"flex justify-between items-center h-16\"><div class=\"flex items-center space-x-4\"><a href=\"/\" class=\"flex items-center space-x-3\"><div class=\"w-9 h-9 bg-black dark:bg-white rounded-lg flex items-center justify-center\"><span class=\"text-white dark:text-black text-lg font-bold\">C</span></div><span class=\"text-lg font-bold text-zinc-900 dark:text-zinc-50\">Constructor</span></a></div></div></div></nav><!-- Main Content --><main class=\"pt-24 pb-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto\"><header class=\"mb-12\"><div class=\"flex justify-between items-center mb-12\"><div><h1 class=\"text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-3\">Доступные курсы</h1><p class=\"text-base text-zinc-600 dark:text-zinc-400\">Начните учиться уже сегодня</p></div><a href=\"/course/create\" class=\"px-6 py-2.5 bg-black dark:bg-white text-white dark:text-black\r\n\t\t\t\t\t\t\t  rounded-lg font-medium\r\n\t\t\t\t\t\t\t  hover:bg-zinc-800 dark:hover:bg-zinc-100\r\n\t\t\t\t\t\t\t  transform transition-all duration-200\r\n\t\t\t\t\t\t\t  hover:scale-[1.02] active:scale-[0.98]\r\n\t\t\t\t\t\t\t  flex items-center space-x-2\"><svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 6v6m0 0v6m0-6h6m-6 0H6\"></path></svg> <span>Создать курс</span></a></div></header><!-- Course Grid --><div id=\"courses-grid\" class=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\" hx-get=\"/courses\" hx-trigger=\"load\" hx-indicator=\"#loading\"><!-- Course Cards -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for i, course := range courses {
+		for _, course := range courses {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"group bg-white dark:bg-zinc-800 rounded-lg border border-zinc-200 dark:border-zinc-700\r\n\t\t\t\t\t\t\thover:border-black dark:hover:border-white\r\n\t\t\t\t\t\t\ttransition-all duration-200\"><div class=\"p-5\"><div class=\"flex items-center space-x-2 mb-3\"><span class=\"px-2.5 py-1 text-xs font-medium text-zinc-700 dark:text-zinc-300\r\n\t\t\t\t\t\t\t\t   bg-zinc-100 dark:bg-zinc-700 rounded-full\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -89,16 +89,16 @@ func Constructor(courses []model.Course, urls []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" lessons </span></span> <a href=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" модули </span></span><a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var6 templ.SafeURL = templ.SafeURL(urls[i])
+			var templ_7745c5c3_Var6 templ.SafeURL = templ.SafeURL(fmt.Sprintf("course/%d", course.ID))
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var6)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"px-4 py-2 bg-black dark:bg-white\r\n\t\t\t\t\t\t\t\t\t\ttext-white dark:text-black text-sm font-medium rounded-lg\r\n\t\t\t\t\t\t\t\t\t\thover:bg-zinc-800 dark:hover:bg-zinc-100\r\n\t\t\t\t\t\t\t\t\t\ttransform transition-all duration-200\r\n\t\t\t\t\t\t\t\t\t\thover:scale-[1.02] active:scale-[0.98]\">Start</a></div></div></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"px-4 py-2 bg-black dark:bg-white\r\n\t\t\t\t\t\t\t\t\t\ttext-white dark:text-black text-sm font-medium rounded-lg\r\n\t\t\t\t\t\t\t\t\t\thover:bg-zinc-800 dark:hover:bg-zinc-100\r\n\t\t\t\t\t\t\t\t\t\ttransform transition-all duration-200\r\n\t\t\t\t\t\t\t\t\t\thover:scale-[1.02] active:scale-[0.98]\">Начать</a></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

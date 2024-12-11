@@ -32,12 +32,14 @@ type Course struct {
 }
 
 type Module struct {
+	ModuleID    int      `json:"module_id"`
 	Title       string   `json:"title" validate:"required"`
 	Description string   `json:"description"`
 	Lessons     []Lesson `json:"lessons"`
 }
 
 type Lesson struct {
+	LessonID    int    `json:"lesson_id"`
 	Title       string `json:"title" validate:"required"`
 	Type        string `json:"type"`
 	Content     string `json:"content"`
